@@ -1,6 +1,6 @@
 package keycollector.main.entities
 
-import com.badlogic.ashley.core.{Engine, Entity}
+import com.badlogic.ashley.core.Engine
 import com.badlogic.gdx.{Gdx, Input}
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -11,7 +11,7 @@ import java.awt.Dimension
 import scala.math.sqrt
 
 // The player
-final class Player(engine: Engine) extends Entity {
+final class Player(engine: Engine) extends Renderable {
     // Constants
     private val size: Int = 30
     private val speed: Float = 2.5f
@@ -25,7 +25,8 @@ final class Player(engine: Engine) extends Entity {
     // Adds the player to the engine
     engine.addEntity(this)
 
-    def render(shapeRenderer: ShapeRenderer): Unit = {
+    @Override
+    override def render(shapeRenderer: ShapeRenderer): Unit = {
         getComponent(classOf[RectComponent]).render(shapeRenderer)
 
         if(Gdx.input.isKeyPressed(Input.Keys.W)) {
