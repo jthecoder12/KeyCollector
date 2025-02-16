@@ -3,7 +3,6 @@ package keycollector.main.teavm;
 import com.github.xpenatan.gdx.backends.teavm.config.AssetFileHandle;
 import com.github.xpenatan.gdx.backends.teavm.config.TeaBuildConfiguration;
 import com.github.xpenatan.gdx.backends.teavm.config.TeaBuilder;
-import com.github.xpenatan.gdx.backends.teavm.config.plugins.TeaReflectionSupplier;
 import com.github.xpenatan.gdx.backends.teavm.gen.SkipClass;
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +16,7 @@ public class TeaVMBuilder {
         TeaBuildConfiguration teaBuildConfiguration = new TeaBuildConfiguration();
         teaBuildConfiguration.assetsPath.add(new AssetFileHandle("../assets"));
         teaBuildConfiguration.webappPath = new File("build/dist").getCanonicalPath();
+        teaBuildConfiguration.htmlTitle = "Key Collector";
 
         // Register any extra classpath assets here:
         // teaBuildConfiguration.additionalAssetsClasspathFiles.add("keycollector/main/asset.extension");
