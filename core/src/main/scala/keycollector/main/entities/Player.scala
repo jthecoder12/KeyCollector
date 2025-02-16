@@ -5,19 +5,22 @@ import com.badlogic.gdx.{Gdx, Input}
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
-import keycollector.main.components.RectComponent
+import keycollector.main.components.{BoxCollider, RectComponent}
 
 import java.awt.Dimension
 import scala.math.sqrt
 
 // The player
-class Player(engine: Engine) extends Entity {
+final class Player(engine: Engine) extends Entity {
     // Constants
     private val size: Int = 30
     private val speed: Float = 2.5f
 
     // Adds a new rect component with the position in the middle of the screen
     add(new RectComponent(new Vector2(Gdx.graphics.getWidth/2f, Gdx.graphics.getHeight/2f), new Dimension(size, size), Color.WHITE))
+
+    // Adds a box collider
+    add(new BoxCollider(getComponent(classOf[RectComponent])))
 
     // Adds the player to the engine
     engine.addEntity(this)

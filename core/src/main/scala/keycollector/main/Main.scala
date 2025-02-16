@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.ScreenUtils
 import keycollector.main.entities.Player
 
-class Main extends ApplicationAdapter {
+final class Main extends ApplicationAdapter {
     private var player: Player = _
     private var shapeRenderer: ShapeRenderer = _
 
