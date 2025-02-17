@@ -12,6 +12,8 @@ final class RectComponent(positionX: Vector2, sizeX: Dimension, color: Color) ex
     override private[components] val position: Vector2 = positionX
     private[components] val size: Dimension = sizeX
 
+    def getPosition: Vector2 = position
+    
     @Override
     override def render(shapeRenderer: ShapeRenderer): Unit = {
         shapeRenderer.setColor(color)

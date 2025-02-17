@@ -1,17 +1,22 @@
 package keycollector.main
 
 import com.badlogic.ashley.core.PooledEngine
-import com.badlogic.gdx.ApplicationAdapter
+import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.{ApplicationAdapter, Gdx}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.utils.ScreenUtils
+import com.badlogic.gdx.scenes.scene2d.Stage
 import keycollector.main.components.{BoxCollider, RectComponent}
 import keycollector.main.entities.Player
 import keycollector.main.levels.{Level, Level1}
+
+import java.util
 
 final class Main extends ApplicationAdapter {
     private var player: Player = _
     private var shapeRenderer: ShapeRenderer = _
     private var currentLevel: Level = _
+    private var currentStage: Stage = _
+    private val levels: util.ArrayList[Level] = new util.ArrayList[Level]
 
     @Override
     override def create(): Unit = {
@@ -22,12 +27,18 @@ final class Main extends ApplicationAdapter {
         shapeRenderer = new ShapeRenderer()
         player = new Player(engine)
 
-        setLevel(new Level1, engine)
+        levels.add(new Level1())
+
+        setLevel(levels.get(0), engine)
     }
 
     @Override
     override def render(): Unit = {
-        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1)
+        Gdx.gl.glClearColor(23/255f, 24/255f, 26/255f, 1)
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+
+        currentStage.act()
+        currentStage.draw()
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
 
@@ -42,9 +53,20 @@ final class Main extends ApplicationAdapter {
         shapeRenderer.end()
     }
 
+    @Override
+    override def resize(width: Int, height: Int): Unit = {
+        currentStage.getViewport.update(width, height, true)
+        currentLevel.scoreLabel.setY(height.toFloat - 35)
+    }
+
+    @Override
+    override def dispose(): Unit = levels.forEach(level => level.dispose())
+
     private def setLevel(level: Level, engine: PooledEngine): Unit = {
         currentLevel = level
         currentLevel.init()
+        currentStage = currentLevel.stage
+        Gdx.input.setInputProcessor(currentStage)
         currentLevel.addKeys(engine)
     }
 }
