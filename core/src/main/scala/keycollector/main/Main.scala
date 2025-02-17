@@ -5,11 +5,10 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.{ApplicationAdapter, Gdx}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.utils.Array
 import keycollector.main.components.{BoxCollider, RectComponent}
 import keycollector.main.entities.Player
 import keycollector.main.levels.{Level, TitleScreen}
-
-import java.util
 
 final class Main extends ApplicationAdapter {
     private var player: Player = _
@@ -17,7 +16,7 @@ final class Main extends ApplicationAdapter {
     private var currentLevel: Level = _
     private var currentStage: Stage = _
     private var engine: PooledEngine = _
-    private val levels: util.ArrayList[Level] = new util.ArrayList[Level]
+    private val levels: Array[Level] = new Array[Level]
 
     @Override
     override def create(): Unit = {
@@ -32,7 +31,7 @@ final class Main extends ApplicationAdapter {
         player = new Player(engine)
 
         levels.add(new TitleScreen)
-
+        
         setLevel(levels.get(0), engine)
     }
 
@@ -69,6 +68,7 @@ final class Main extends ApplicationAdapter {
     override def dispose(): Unit = levels.forEach(level => level.dispose)
 
     def setLevel(level: Level, engine: PooledEngine): Unit = {
+        // This line does not work with TeaVM for no reason
         currentLevel = level
         currentLevel.init()
         currentStage = currentLevel.stage

@@ -9,15 +9,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
+import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import keycollector.main.components.{CircleCollider, CircleComponent}
 import keycollector.main.entities.{Key, Player}
 
-import java.util
-
 abstract class Level extends Disposable {
-    protected val keys: util.ArrayList[Key] = new util.ArrayList[Key]
+    protected val keys: Array[Key] = new Array[Key]
     private var score: Int = 0
 
     val stage: Stage = new Stage(new ScreenViewport)
@@ -39,12 +38,14 @@ abstract class Level extends Disposable {
             key.getComponent(classOf[CircleCollider]).update(key.getComponent(classOf[CircleComponent]))
         })
 
-        for(i <- 0 until keys.size())
-            if(keys.get(i).isColliding(player)) {
+        val iterator: Array.ArrayIterator[Key] = keys.iterator()
+        while(iterator.hasNext)
+            if (iterator.next.isColliding(player)) {
                 coinSound.play(3)
                 score += 1
                 scoreLabel.setText(String.format("Keys Collected: %d", score))
-                keys.remove(keys.get(i))
+                // We use iterator.remove() to remove
+                iterator.remove()
             }
 
         if(keys.isEmpty && getClass.getSimpleName != "TitleScreen") println("You win")
