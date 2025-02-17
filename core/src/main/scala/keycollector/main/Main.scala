@@ -68,7 +68,7 @@ final class Main extends ApplicationAdapter {
     override def dispose(): Unit = levels.forEach(level => level.dispose)
 
     def setLevel(level: Level, engine: PooledEngine): Unit = {
-        // This line does not work with TeaVM for no reason
+        // This line does not work with TeaVM
         currentLevel = level
         currentLevel.init()
         currentStage = currentLevel.stage
