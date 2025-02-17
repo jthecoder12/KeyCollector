@@ -31,7 +31,7 @@ final class Main extends ApplicationAdapter {
         player = new Player(engine)
 
         levels.add(new TitleScreen)
-        
+
         setLevel(levels.get(0), engine)
     }
 

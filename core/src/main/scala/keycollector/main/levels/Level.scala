@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Disposable
-import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.badlogic.gdx.utils.viewport.StretchViewport
 import keycollector.main.components.{CircleCollider, CircleComponent}
 import keycollector.main.entities.{Key, Player}
 
@@ -19,7 +19,7 @@ abstract class Level extends Disposable {
     protected val keys: Array[Key] = new Array[Key]
     private var score: Int = 0
 
-    val stage: Stage = new Stage(new ScreenViewport)
+    val stage: Stage = new Stage(new StretchViewport(1280, 720))
     protected val font: BitmapFont = new BitmapFont(Gdx.files.internal("OpenSans.fnt"))
     protected val labelStyle: LabelStyle = new LabelStyle(font, Color.WHITE)
 
