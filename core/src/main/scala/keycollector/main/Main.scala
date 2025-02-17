@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.scenes.scene2d.Stage
 import keycollector.main.components.{BoxCollider, RectComponent}
 import keycollector.main.entities.Player
-import keycollector.main.levels.{Level, Level1}
+import keycollector.main.levels.{Level, TitleScreen}
 
 import java.util
 
@@ -16,18 +16,22 @@ final class Main extends ApplicationAdapter {
     private var shapeRenderer: ShapeRenderer = _
     private var currentLevel: Level = _
     private var currentStage: Stage = _
+    private var engine: PooledEngine = _
     private val levels: util.ArrayList[Level] = new util.ArrayList[Level]
 
     @Override
     override def create(): Unit = {
+        // Set instance in instance manager
+        InstanceManager.main = this
+
         // Entity engine
-        val engine: PooledEngine = new PooledEngine
+        engine = new PooledEngine
 
         // More instances
-        shapeRenderer = new ShapeRenderer()
+        shapeRenderer = new ShapeRenderer
         player = new Player(engine)
 
-        levels.add(new Level1())
+        levels.add(new TitleScreen)
 
         setLevel(levels.get(0), engine)
     }
@@ -42,10 +46,12 @@ final class Main extends ApplicationAdapter {
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
 
-        // Draw player
-        player.render(shapeRenderer)
-        //Update player collider
-        player.getComponent(classOf[BoxCollider]).update(player.getComponent(classOf[RectComponent]))
+        if(currentLevel.getClass.getSimpleName != "TitleScreen") {
+            // Draw player
+            player.render(shapeRenderer)
+            //Update player collider
+            player.getComponent(classOf[BoxCollider]).update(player.getComponent(classOf[RectComponent]))
+        }
 
         // Draw keys from the current level
         currentLevel.render(shapeRenderer, player)
@@ -60,13 +66,19 @@ final class Main extends ApplicationAdapter {
     }
 
     @Override
-    override def dispose(): Unit = levels.forEach(level => level.dispose())
+    override def dispose(): Unit = levels.forEach(level => level.dispose)
 
-    private def setLevel(level: Level, engine: PooledEngine): Unit = {
+    def setLevel(level: Level, engine: PooledEngine): Unit = {
         currentLevel = level
         currentLevel.init()
         currentStage = currentLevel.stage
         Gdx.input.setInputProcessor(currentStage)
         currentLevel.addKeys(engine)
     }
+
+    def getEngine: PooledEngine = engine
+}
+
+object InstanceManager {
+    var main: Main = _
 }

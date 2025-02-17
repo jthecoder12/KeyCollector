@@ -1,0 +1,7 @@
+A game by jthecoder12 (https://github.com/jthecoder12)
+
+Coin sound (https://opengameart.org/content/picked-coin-echo):
+Author: NenadSimic
+Licensed under CC-BY 3.0 (https://creativecommons.org/licenses/by/3.0)
+Changes to sound:
+Converted to wave with convertio.co (https://convertio.co/wav-ogg)

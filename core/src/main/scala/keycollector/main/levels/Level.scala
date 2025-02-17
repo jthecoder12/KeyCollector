@@ -21,7 +21,8 @@ abstract class Level extends Disposable {
     private var score: Int = 0
 
     val stage: Stage = new Stage(new ScreenViewport)
-    private val labelStyle: LabelStyle = new LabelStyle(new BitmapFont(Gdx.files.internal("OpenSans.fnt")), Color.WHITE)
+    protected val font: BitmapFont = new BitmapFont(Gdx.files.internal("OpenSans.fnt"))
+    protected val labelStyle: LabelStyle = new LabelStyle(font, Color.WHITE)
 
     val scoreLabel: Label = new Label("Keys Collected: 0", labelStyle)
     scoreLabel.setY(Gdx.graphics.getHeight.toFloat - 35)
@@ -45,6 +46,8 @@ abstract class Level extends Disposable {
                 scoreLabel.setText(String.format("Keys Collected: %d", score))
                 keys.remove(keys.get(i))
             }
+
+        if(keys.isEmpty && getClass.getSimpleName != "TitleScreen") println("You win")
     }
 
     def init(): Unit
@@ -52,6 +55,7 @@ abstract class Level extends Disposable {
     @Override
     override def dispose(): Unit = {
         coinSound.dispose()
+        font.dispose()
         stage.dispose()
     }
 }

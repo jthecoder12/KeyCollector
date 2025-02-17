@@ -18,7 +18,7 @@ final class Player(engine: Engine) extends Renderable {
 
     // Adds a new rect component with the position in the middle of the screen
     add(new RectComponent(new Vector2(Gdx.graphics.getWidth/2f, Gdx.graphics.getHeight/2f), new Dimension(size, size), Color.WHITE))
-
+    
     // Adds a box collider
     add(new BoxCollider(getComponent(classOf[RectComponent])))
 
