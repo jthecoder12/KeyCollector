@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -20,7 +22,13 @@ abstract class Level extends Disposable {
     private var score: Int = 0
 
     val stage: Stage = new Stage(new StretchViewport(1280, 720))
-    protected val font: BitmapFont = new BitmapFont(Gdx.files.internal("OpenSans.fnt"))
+
+    private val generator: FreeTypeFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("OpenSans.ttf"))
+    private val parameter: FreeTypeFontParameter = new FreeTypeFontParameter
+    parameter.size = 32
+    protected val font: BitmapFont = generator.generateFont(parameter)
+    generator.dispose()
+
     protected val labelStyle: LabelStyle = new LabelStyle(font, Color.WHITE)
 
     val scoreLabel: Label = new Label("Keys Collected: 0", labelStyle)

@@ -59,10 +59,7 @@ final class Main extends ApplicationAdapter {
     }
 
     @Override
-    override def resize(width: Int, height: Int): Unit = {
-        currentStage.getViewport.update(width, height, true)
-        currentLevel.scoreLabel.setY(height.toFloat - 35)
-    }
+    override def resize(width: Int, height: Int): Unit = currentStage.getViewport.update(width, height, true)
 
     @Override
     override def dispose(): Unit = levels.forEach(level => level.dispose)
