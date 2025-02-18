@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.{InputEvent, InputListener}
 import com.badlogic.gdx.scenes.scene2d.ui.{Label, TextButton}
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
-import keycollector.main.InstanceManager
+import keycollector.main.StaticManager
 
 final class TitleScreen extends Level {
     @Override
@@ -34,7 +34,7 @@ final class TitleScreen extends Level {
                         clickSound.dispose()
                     }).start()
 
-                    InstanceManager.main.setLevel(new Level1, InstanceManager.main.getEngine)
+                    StaticManager.main.setLevel(StaticManager.main.getLevels.get(1), StaticManager.main.getEngine)
                 }
 
                 true

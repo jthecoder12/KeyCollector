@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.Array
 import keycollector.main.components.{BoxCollider, RectComponent}
 import keycollector.main.entities.Player
-import keycollector.main.levels.{Level, TitleScreen}
+import keycollector.main.levels.{Level, Level1, Level2, TitleScreen}
 
 final class Main extends ApplicationAdapter {
     private var player: Player = _
@@ -21,7 +21,7 @@ final class Main extends ApplicationAdapter {
     @Override
     override def create(): Unit = {
         // Set instance in instance manager
-        InstanceManager.main = this
+        StaticManager.main = this
 
         // Entity engine
         engine = new PooledEngine
@@ -31,6 +31,8 @@ final class Main extends ApplicationAdapter {
         player = new Player(engine)
 
         levels.add(new TitleScreen)
+        levels.add(new Level1)
+        levels.add(new Level2)
 
         setLevel(levels.get(0), engine)
     }
@@ -74,8 +76,11 @@ final class Main extends ApplicationAdapter {
     }
 
     def getEngine: PooledEngine = engine
+
+    def getLevels: Array[Level] = levels
 }
 
-object InstanceManager {
+object StaticManager {
     var main: Main = _
+    var score: Int = 0
 }

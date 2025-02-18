@@ -14,12 +14,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.viewport.StretchViewport
+import keycollector.main.StaticManager
 import keycollector.main.components.{CircleCollider, CircleComponent}
 import keycollector.main.entities.{Key, Player}
 
 abstract class Level extends Disposable {
     protected val keys: Array[Key] = new Array[Key]
-    private var score: Int = 0
 
     val stage: Stage = new Stage(new StretchViewport(1280, 720))
 
@@ -31,7 +31,7 @@ abstract class Level extends Disposable {
 
     protected val labelStyle: LabelStyle = new LabelStyle(font, Color.WHITE)
 
-    val scoreLabel: Label = new Label("Keys Collected: 0", labelStyle)
+    val scoreLabel: Label = new Label(String.format("Keys Collected: %d", StaticManager.score), labelStyle)
     scoreLabel.setY(Gdx.graphics.getHeight.toFloat - 35)
 
     stage.addActor(scoreLabel)
@@ -50,13 +50,16 @@ abstract class Level extends Disposable {
         while(iterator.hasNext)
             if (iterator.next.isColliding(player)) {
                 coinSound.play(3)
-                score += 1
-                scoreLabel.setText(String.format("Keys Collected: %d", score))
+                StaticManager.score += 1
+                scoreLabel.setText(String.format("Keys Collected: %d", StaticManager.score))
                 // We use iterator.remove() to remove
                 iterator.remove()
             }
 
-        if(keys.isEmpty && getClass.getSimpleName != "TitleScreen") println("You win")
+        if(keys.isEmpty && getClass.getSimpleName != "TitleScreen") {
+            if(getClass.getSimpleName.takeRight(1).toInt == StaticManager.main.getLevels.size - 1) println("You win")
+            else StaticManager.main.setLevel(StaticManager.main.getLevels.get(getClass.getSimpleName.takeRight(1).toInt + 1), StaticManager.main.getEngine)
+        }
     }
 
     def init(): Unit
