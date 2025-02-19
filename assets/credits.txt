@@ -1,7 +1,39 @@
-A game by jthecoder12 (https://github.com/jthecoder12)
+A game by jthecoder12 (https://github.com/jthecoder12) and (https://jthecoder12.itch.io)
+A submission to the Brackeys Game Jam 2025.1 (https://itch.io/jam/brackeys-13)
 
 Coin sound (https://opengameart.org/content/picked-coin-echo):
 Author: NenadSimic
 Licensed under CC-BY 3.0 (https://creativecommons.org/licenses/by/3.0)
 Changes to sound:
 Converted to wave with convertio.co (https://convertio.co/wav-ogg)
+
+Click sound from Open Game Art (https://opengameart.org)
+Licensed under CC0 (Public Domain)
+
+Made with libGDX
+
+Font:
+OpenSans (from Google Fonts licensed under the Open Font License)
+https://fonts.google.com/specimen/Open+Sans
+
+ImGui:
+Original made by Omar Cornut: https://github.com/ocornut/imgui
+Java verison made by SpaiR: https://github.com/spair/imgui
+
+libGDX:
+Java game development framework
+https://libgdx.com
+
+Java:
+Backend programming language
+https://oracle.com/java
+https://java.com
+https://adoptium.net (Eclipse Adoptium used in the desktop builds and was used to compile the game)
+
+Scala:
+Programming language used to make the game
+https://scala-lang.org
+
+Maven Repository:
+Used to find packages
+https://mvnrepository.com

@@ -20,26 +20,40 @@ import keycollector.main.entities.{Key, Player}
 
 abstract class Level extends Disposable {
     protected val keys: Array[Key] = new Array[Key]
+    var alreadyInit: Boolean = false
+    var stage: Stage = _
 
-    val stage: Stage = new Stage(new StretchViewport(1280, 720))
+    private var generator: FreeTypeFontGenerator = _
+    private var parameter: FreeTypeFontParameter = _
+    protected var font: BitmapFont = _
 
-    private val generator: FreeTypeFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("OpenSans.ttf"))
-    private val parameter: FreeTypeFontParameter = new FreeTypeFontParameter
-    parameter.size = 32
-    protected val font: BitmapFont = generator.generateFont(parameter)
-    generator.dispose()
+    protected var labelStyle: LabelStyle = _
 
-    protected val labelStyle: LabelStyle = new LabelStyle(font, Color.WHITE)
+    var scoreLabel: Label = _
 
-    val scoreLabel: Label = new Label(String.format("Keys Collected: %d", StaticManager.score), labelStyle)
-    scoreLabel.setY(Gdx.graphics.getHeight.toFloat - 35)
+    private var coinSound: Sound = _
 
-    stage.addActor(scoreLabel)
+    if(!alreadyInit) {
+        stage = new Stage(new StretchViewport(1280, 720))
+        
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("OpenSans.ttf"))
+        parameter = new FreeTypeFontParameter
+        parameter.size = 32
+        font = generator.generateFont(parameter)
+        generator.dispose()
+        
+        labelStyle = new LabelStyle(font, Color.WHITE)
+        scoreLabel = new Label(String.format("Keys Collected: %d", StaticManager.score), labelStyle)
+        scoreLabel.setY(Gdx.graphics.getHeight.toFloat - 35)
+        stage.addActor(scoreLabel)
+        
+        coinSound = Gdx.audio.newSound(Gdx.files.internal("coin.ogg"))
+    }
 
-    private val coinSound: Sound = Gdx.audio.newSound(Gdx.files.internal("coin.ogg"))
-
-    def addKeys(engine: Engine): Unit = keys.forEach(key => engine.addEntity(key))
+    def addKeys(engine: Engine): Unit = if(!alreadyInit) keys.forEach(key => engine.addEntity(key))
     def render(shapeRenderer: ShapeRenderer, player: Player): Unit = {
+        if(!alreadyInit) alreadyInit = true
+        
         keys.forEach(key => {
             key.render(shapeRenderer)
 
@@ -56,8 +70,8 @@ abstract class Level extends Disposable {
                 iterator.remove()
             }
 
-        if(keys.isEmpty && getClass.getSimpleName != "TitleScreen") {
-            if(getClass.getSimpleName.takeRight(1).toInt == StaticManager.main.getLevels.size - 1) println("You win")
+        if(keys.isEmpty && getClass.getSimpleName != "TitleScreen" && getClass.getSimpleName != "Credits") {
+            if(getClass.getSimpleName.takeRight(1).toInt == StaticManager.main.getLevels.size - 1) StaticManager.main.setLevel(StaticManager.main.getLevels.get(StaticManager.main.getLevels.size - 1), StaticManager.main.getEngine)
             else StaticManager.main.setLevel(StaticManager.main.getLevels.get(getClass.getSimpleName.takeRight(1).toInt + 1), StaticManager.main.getEngine)
         }
     }

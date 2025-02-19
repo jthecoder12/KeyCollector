@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.Array
 import keycollector.main.components.{BoxCollider, RectComponent}
 import keycollector.main.entities.Player
-import keycollector.main.levels.{Level, Level1, Level2, TitleScreen}
+import keycollector.main.levels.{Credits, Level, Level1, Level2, TitleScreen}
 
 final class Main extends ApplicationAdapter {
     private var player: Player = _
@@ -33,8 +33,11 @@ final class Main extends ApplicationAdapter {
         levels.add(new TitleScreen)
         levels.add(new Level1)
         levels.add(new Level2)
+        levels.add(new Credits)
 
         setLevel(levels.get(0), engine)
+
+        ImGuiUI.init()
     }
 
     @Override
@@ -47,7 +50,7 @@ final class Main extends ApplicationAdapter {
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
 
-        if(currentLevel.getClass.getSimpleName != "TitleScreen") {
+        if(currentLevel.getClass.getSimpleName != "TitleScreen" && currentLevel.getClass.getSimpleName != "Credits") {
             // Draw player
             player.render(shapeRenderer)
             //Update player collider
@@ -58,18 +61,23 @@ final class Main extends ApplicationAdapter {
         currentLevel.render(shapeRenderer, player)
 
         shapeRenderer.end()
+
+        if(currentLevel.getClass.getSimpleName == "Credits") currentLevel.asInstanceOf[Credits].update()
     }
 
     @Override
     override def resize(width: Int, height: Int): Unit = currentStage.getViewport.update(width, height, true)
 
     @Override
-    override def dispose(): Unit = levels.forEach(level => level.dispose)
+    override def dispose(): Unit = {
+        levels.forEach(level => level.dispose)
+        ImGuiUI.dispose()
+    }
 
     def setLevel(level: Level, engine: PooledEngine): Unit = {
-        // This line does not work with TeaVM
+        player.getComponent(classOf[RectComponent]).getPosition.set(Gdx.graphics.getWidth.toFloat / 2f, Gdx.graphics.getHeight.toFloat / 2f)
         currentLevel = level
-        currentLevel.init()
+        if(!currentLevel.alreadyInit) currentLevel.init()
         currentStage = currentLevel.stage
         Gdx.input.setInputProcessor(currentStage)
         currentLevel.addKeys(engine)
