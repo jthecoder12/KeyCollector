@@ -34,6 +34,7 @@ final class TitleScreen extends Level {
                         clickSound.dispose()
                     }).start()
 
+                    StaticManager.main.getLevels.forEach(level => level.paused.set(false))
                     StaticManager.main.setLevel(StaticManager.main.getLevels.get(1), StaticManager.main.getEngine)
                 }
 
@@ -41,6 +42,27 @@ final class TitleScreen extends Level {
             }
         })
 
+        val creditsButton: TextButton = new TextButton("Credits", buttonStyle)
+        creditsButton.setPosition(Gdx.graphics.getWidth.toFloat / 2f - 35, Gdx.graphics.getHeight.toFloat - 225)
+        creditsButton.addListener(new InputListener() {
+            @Override
+            override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean = {
+                if(button == 0) {
+                    val clickSound: Sound = Gdx.audio.newSound(Gdx.files.internal("click3.wav"))
+                    clickSound.play(3)
+                    new Thread(() => {
+                        Thread.sleep(100)
+                        clickSound.dispose()
+                    }).start()
+                    
+                    StaticManager.main.setLevel(StaticManager.main.getLevels.get(StaticManager.main.getLevels.size - 1), StaticManager.main.getEngine)
+                }
+
+                true
+            }
+        })
+
         stage.addActor(playButton)
+        stage.addActor(creditsButton)
     }
 }

@@ -10,6 +10,9 @@ Converted to wave with convertio.co (https://convertio.co/wav-ogg)
 Click sound from Open Game Art (https://opengameart.org)
 Licensed under CC0 (Public Domain)
 
+Music from Open Game Art (https://opengameart.org)
+Licensed under CC0 (Public Domain)
+
 Made with libGDX
 
 Font:

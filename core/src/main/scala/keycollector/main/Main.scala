@@ -1,6 +1,7 @@
 package keycollector.main
 
 import com.badlogic.ashley.core.PooledEngine
+import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.{ApplicationAdapter, Gdx}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -16,6 +17,7 @@ final class Main extends ApplicationAdapter {
     private var currentLevel: Level = _
     private var currentStage: Stage = _
     private var engine: PooledEngine = _
+    private var music: Music = _
     private val levels: Array[Level] = new Array[Level]
 
     @Override
@@ -38,6 +40,9 @@ final class Main extends ApplicationAdapter {
         setLevel(levels.get(0), engine)
 
         ImGuiUI.init()
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("ChillLofiR.mp3"))
+        music.play()
     }
 
     @Override
@@ -55,6 +60,8 @@ final class Main extends ApplicationAdapter {
             player.render(shapeRenderer)
             //Update player collider
             player.getComponent(classOf[BoxCollider]).update(player.getComponent(classOf[RectComponent]))
+            //Update player moving status
+            player.moving = !currentLevel.paused.get
         }
 
         // Draw keys from the current level
@@ -63,6 +70,7 @@ final class Main extends ApplicationAdapter {
         shapeRenderer.end()
 
         if(currentLevel.getClass.getSimpleName == "Credits") currentLevel.asInstanceOf[Credits].update()
+        currentLevel.renderImGui()
     }
 
     @Override
@@ -71,6 +79,7 @@ final class Main extends ApplicationAdapter {
     @Override
     override def dispose(): Unit = {
         levels.forEach(level => level.dispose)
+        music.dispose()
         ImGuiUI.dispose()
     }
 
@@ -88,6 +97,7 @@ final class Main extends ApplicationAdapter {
     def getLevels: Array[Level] = levels
 }
 
+// Simulates Java's static variables using a Scala singleton
 object StaticManager {
     var main: Main = _
     var score: Int = 0

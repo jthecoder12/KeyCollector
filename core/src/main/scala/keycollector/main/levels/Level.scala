@@ -1,7 +1,7 @@
 package keycollector.main.levels
 
 import com.badlogic.ashley.core.Engine
-import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.{Gdx, Input}
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
@@ -14,7 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.viewport.StretchViewport
-import keycollector.main.StaticManager
+import imgui.ImGui
+import imgui.`type`.ImBoolean
+import keycollector.main.{ImGuiUI, StaticManager}
 import keycollector.main.components.{CircleCollider, CircleComponent}
 import keycollector.main.entities.{Key, Player}
 
@@ -33,27 +35,29 @@ abstract class Level extends Disposable {
 
     private var coinSound: Sound = _
 
+    val paused: ImBoolean = new ImBoolean
+
     if(!alreadyInit) {
         stage = new Stage(new StretchViewport(1280, 720))
-        
+
         generator = new FreeTypeFontGenerator(Gdx.files.internal("OpenSans.ttf"))
         parameter = new FreeTypeFontParameter
         parameter.size = 32
         font = generator.generateFont(parameter)
         generator.dispose()
-        
+
         labelStyle = new LabelStyle(font, Color.WHITE)
         scoreLabel = new Label(String.format("Keys Collected: %d", StaticManager.score), labelStyle)
         scoreLabel.setY(Gdx.graphics.getHeight.toFloat - 35)
         stage.addActor(scoreLabel)
-        
+
         coinSound = Gdx.audio.newSound(Gdx.files.internal("coin.ogg"))
     }
 
     def addKeys(engine: Engine): Unit = if(!alreadyInit) keys.forEach(key => engine.addEntity(key))
     def render(shapeRenderer: ShapeRenderer, player: Player): Unit = {
         if(!alreadyInit) alreadyInit = true
-        
+
         keys.forEach(key => {
             key.render(shapeRenderer)
 
@@ -73,6 +77,34 @@ abstract class Level extends Disposable {
         if(keys.isEmpty && getClass.getSimpleName != "TitleScreen" && getClass.getSimpleName != "Credits") {
             if(getClass.getSimpleName.takeRight(1).toInt == StaticManager.main.getLevels.size - 1) StaticManager.main.setLevel(StaticManager.main.getLevels.get(StaticManager.main.getLevels.size - 1), StaticManager.main.getEngine)
             else StaticManager.main.setLevel(StaticManager.main.getLevels.get(getClass.getSimpleName.takeRight(1).toInt + 1), StaticManager.main.getEngine)
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && getClass.getSimpleName != "TitleScreen" && getClass.getSimpleName != "Credits") paused.set(!paused.get)
+    }
+
+    def renderImGui(): Unit = {
+        if (paused.get()) {
+            ImGuiUI.beginLoop()
+
+            ImGui.begin("Paused", paused, 38)
+            // Center the window
+            ImGui.setWindowPos(Gdx.graphics.getWidth.toFloat / 2f - ImGui.getWindowSizeX / 2f, Gdx.graphics.getHeight.toFloat / 2f - ImGui.getWindowSizeY / 2f)
+            ImGui.setWindowSize(750, 500)
+
+            if(ImGui.button("Main Menu")) {
+                val clickSound: Sound = Gdx.audio.newSound(Gdx.files.internal("click3.wav"))
+                clickSound.play(3)
+                new Thread(() => {
+                    Thread.sleep(100)
+                    clickSound.dispose()
+                }).start()
+
+                StaticManager.main.setLevel(StaticManager.main.getLevels.get(0), StaticManager.main.getEngine)
+            }
+
+            ImGui.end()
+
+            ImGuiUI.endLoop()
         }
     }
 
