@@ -1,6 +1,6 @@
 package keycollector.main.levels
 
-import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.{Gdx, utils}
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.{InputEvent, InputListener}
@@ -9,8 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 import keycollector.main.StaticManager
 
 final class TitleScreen extends Level {
+    private var instance: TitleScreen = _
+
     @Override
     override def init(): Unit = {
+        instance = this
+
         scoreLabel.remove()
 
         val titleLabel: Label = new Label("Key Collector", labelStyle)
@@ -34,7 +38,19 @@ final class TitleScreen extends Level {
                         clickSound.dispose()
                     }).start()
 
-                    StaticManager.main.getLevels.forEach(level => level.paused.set(false))
+                    val realLevels: com.badlogic.gdx.utils.Array[Level] = new utils.Array[Level](StaticManager.main.getLevels)
+                    realLevels.removeIndex(0)
+
+                    realLevels.forEach(level => level.dispose)
+                    realLevels.clear()
+                    StaticManager.main.setLevels(new utils.Array[Level])
+                    StaticManager.main.getLevels.add(instance)
+                    StaticManager.main.getLevels.add(new Level1)
+                    StaticManager.main.getLevels.add(new Level2)
+                    StaticManager.main.getLevels.add(new Credits)
+
+                    StaticManager.score = 0
+                    StaticManager.main.getLevels.forEach(level => level.resetScore())
                     StaticManager.main.setLevel(StaticManager.main.getLevels.get(1), StaticManager.main.getEngine)
                 }
 
@@ -54,7 +70,7 @@ final class TitleScreen extends Level {
                         Thread.sleep(100)
                         clickSound.dispose()
                     }).start()
-                    
+
                     StaticManager.main.setLevel(StaticManager.main.getLevels.get(StaticManager.main.getLevels.size - 1), StaticManager.main.getEngine)
                 }
 

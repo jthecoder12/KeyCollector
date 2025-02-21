@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.Array
 import keycollector.main.components.{BoxCollider, RectComponent}
 import keycollector.main.entities.Player
-import keycollector.main.levels.{Credits, Level, Level1, Level2, TitleScreen}
+import keycollector.main.levels.{Credits, Level, TitleScreen}
 
 final class Main extends ApplicationAdapter {
     private var player: Player = _
@@ -18,7 +18,7 @@ final class Main extends ApplicationAdapter {
     private var currentStage: Stage = _
     private var engine: PooledEngine = _
     private var music: Music = _
-    private val levels: Array[Level] = new Array[Level]
+    private var levels: Array[Level] = new Array[Level]
 
     @Override
     override def create(): Unit = {
@@ -33,9 +33,6 @@ final class Main extends ApplicationAdapter {
         player = new Player(engine)
 
         levels.add(new TitleScreen)
-        levels.add(new Level1)
-        levels.add(new Level2)
-        levels.add(new Credits)
 
         setLevel(levels.get(0), engine)
 
@@ -90,11 +87,13 @@ final class Main extends ApplicationAdapter {
         currentStage = currentLevel.stage
         Gdx.input.setInputProcessor(currentStage)
         currentLevel.addKeys(engine)
+        println(engine.getEntities)
     }
 
     def getEngine: PooledEngine = engine
 
     def getLevels: Array[Level] = levels
+    def setLevels(array: Array[Level]): Unit = levels = array
 }
 
 // Simulates Java's static variables using a Scala singleton

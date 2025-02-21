@@ -108,6 +108,10 @@ abstract class Level extends Disposable {
         }
     }
 
+    def resetScore(): Unit = scoreLabel.setText(String.format("Keys Collected: %d", StaticManager.score))
+
+    def getKeys: Array[Key] = keys
+
     def init(): Unit
 
     @Override
