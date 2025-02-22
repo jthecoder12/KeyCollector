@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.Array
 import keycollector.main.components.{BoxCollider, RectComponent}
 import keycollector.main.entities.Player
-import keycollector.main.levels.{Credits, Level, TitleScreen}
+import keycollector.main.levels.{Credits, Level, Level1, Level2, Level3, Level4, TitleScreen}
 
 final class Main extends ApplicationAdapter {
     private var player: Player = _
@@ -18,7 +18,7 @@ final class Main extends ApplicationAdapter {
     private var currentStage: Stage = _
     private var engine: PooledEngine = _
     private var music: Music = _
-    private var levels: Array[Level] = new Array[Level]
+    private val levels: Array[Level] = new Array[Level]
 
     @Override
     override def create(): Unit = {
@@ -39,6 +39,7 @@ final class Main extends ApplicationAdapter {
         ImGuiUI.init()
 
         music = Gdx.audio.newMusic(Gdx.files.internal("ChillLofiR.mp3"))
+        music.setLooping(true)
         music.play()
     }
 
@@ -77,7 +78,7 @@ final class Main extends ApplicationAdapter {
     override def dispose(): Unit = {
         levels.forEach(level => level.dispose)
         music.dispose()
-        ImGuiUI.dispose()
+        ImGuiUI.dispose
     }
 
     def setLevel(level: Level, engine: PooledEngine): Unit = {
@@ -87,17 +88,29 @@ final class Main extends ApplicationAdapter {
         currentStage = currentLevel.stage
         Gdx.input.setInputProcessor(currentStage)
         currentLevel.addKeys(engine)
-        println(engine.getEntities)
     }
 
     def getEngine: PooledEngine = engine
 
     def getLevels: Array[Level] = levels
-    def setLevels(array: Array[Level]): Unit = levels = array
 }
 
 // Simulates Java's static variables using a Scala singleton
 object StaticManager {
     var main: Main = _
     var score: Int = 0
+    
+    def reset(): Unit = {
+        // Reset everything
+        score = 0
+        main.getLevels.forEach(level => level.dispose)
+
+        main.getLevels.clear()
+        main.getLevels.add(new TitleScreen)
+        main.getLevels.add(new Level1)
+        main.getLevels.add(new Level2)
+        main.getLevels.add(new Level3)
+        main.getLevels.add(new Level4)
+        main.getLevels.add(new Credits)
+    }
 }

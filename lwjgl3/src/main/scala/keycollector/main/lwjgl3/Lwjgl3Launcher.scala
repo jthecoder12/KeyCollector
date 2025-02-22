@@ -22,7 +22,7 @@ object Lwjgl3Launcher {
         catch
             case e: Exception =>
                 e.printStackTrace()
-                tinyfd_messageBox("Uncaught Exception", String.format("%s%nMessage: %s%nStack trace: %s", e.getClass.getCanonicalName, e.getMessage, e.getStackTrace.mkString("Array(", ", ", ")")).replace('"', Character.MIN_VALUE).replace('\'', Character.MIN_VALUE), "ok", "error", true)
+                tinyfd_messageBox("Uncaught Exception", String.format("%s%nMessage: %s%nStack trace: %s", e.getClass.getCanonicalName, e.getMessage, e.getStackTrace.mkString("(", "\n, ", "\n)")).replace('"', Character.MIN_VALUE).replace('\'', Character.MIN_VALUE), "ok", "error", true)
                 System.exit(1)
     }
 }

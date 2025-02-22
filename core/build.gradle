@@ -7,7 +7,6 @@ dependencies {
   api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
   // https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-freetype
   api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-  api "com.kotcrab.vis:vis-ui:$visUiVersion"
   api "org.scala-lang:scala3-library_3:$scalaVersion"
 
   api "io.github.spair:imgui-java-binding:1.89.0"

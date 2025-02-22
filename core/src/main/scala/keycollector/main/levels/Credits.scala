@@ -12,7 +12,7 @@ final class Credits extends Level {
     override def init(): Unit = {
         scoreLabel.remove()
 
-        credits = Gdx.files.internal("credits.txt").readString()
+        credits = Gdx.files.internal("credits.txt").readString
     }
 
     def update(): Unit = {
@@ -31,16 +31,7 @@ final class Credits extends Level {
                 clickSound.dispose()
             }).start()
 
-            // Reset everything
-            StaticManager.score = 0
-            StaticManager.main.getLevels.forEach(level => level.dispose())
-
-            StaticManager.main.getLevels.clear()
-            StaticManager.main.getLevels.add(new TitleScreen)
-            StaticManager.main.getLevels.add(new Level1)
-            StaticManager.main.getLevels.add(new Level2)
-            StaticManager.main.getLevels.add(new Credits)
-
+            StaticManager.reset()
             StaticManager.main.setLevel(StaticManager.main.getLevels.get(0), StaticManager.main.getEngine)
         }
 
