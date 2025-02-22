@@ -3,13 +3,13 @@ package keycollector.main
 import com.badlogic.ashley.core.PooledEngine
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.{ApplicationAdapter, Gdx}
+import com.badlogic.gdx.{ApplicationAdapter, Gdx, Input}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.Array
 import keycollector.main.components.{BoxCollider, RectComponent}
 import keycollector.main.entities.Player
-import keycollector.main.levels.{Credits, Level, Level1, Level2, Level3, Level4, TitleScreen}
+import keycollector.main.levels.{Credits, Level, Level1, Level10, Level2, Level3, Level4, Level5, Level6, Level7, Level8, Level9, TitleScreen}
 
 final class Main extends ApplicationAdapter {
     private var player: Player = _
@@ -60,6 +60,8 @@ final class Main extends ApplicationAdapter {
             player.getComponent(classOf[BoxCollider]).update(player.getComponent(classOf[RectComponent]))
             //Update player moving status
             player.moving = !currentLevel.paused.get
+
+            if(Gdx.input.isKeyJustPressed(Input.Keys.R)) player.getComponent(classOf[RectComponent]).getPosition.set(640, 360)
         }
 
         // Draw keys from the current level
@@ -77,6 +79,7 @@ final class Main extends ApplicationAdapter {
     @Override
     override def dispose(): Unit = {
         levels.forEach(level => level.dispose)
+        shapeRenderer.dispose()
         music.dispose()
         ImGuiUI.dispose
     }
@@ -99,7 +102,7 @@ final class Main extends ApplicationAdapter {
 object StaticManager {
     var main: Main = _
     var score: Int = 0
-    
+
     def reset(): Unit = {
         // Reset everything
         score = 0
@@ -111,6 +114,12 @@ object StaticManager {
         main.getLevels.add(new Level2)
         main.getLevels.add(new Level3)
         main.getLevels.add(new Level4)
+        main.getLevels.add(new Level5)
+        main.getLevels.add(new Level6)
+        main.getLevels.add(new Level7)
+        main.getLevels.add(new Level8)
+        main.getLevels.add(new Level9)
+        main.getLevels.add(new Level10)
         main.getLevels.add(new Credits)
     }
 }

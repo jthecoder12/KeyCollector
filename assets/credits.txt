@@ -20,8 +20,8 @@ OpenSans (from Google Fonts licensed under the Open Font License)
 https://fonts.google.com/specimen/Open+Sans
 
 ImGui:
-Original made by Omar Cornut: https://github.com/ocornut/imgui
-Java verison made by SpaiR: https://github.com/spair/imgui
+Original made by Omar Cornut (MIT License): https://github.com/ocornut/imgui
+Java verison made by SpaiR (MIT License): https://github.com/spair/imgui
 
 libGDX:
 Java game development framework

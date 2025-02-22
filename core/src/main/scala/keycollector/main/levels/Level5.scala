@@ -1,13 +1,12 @@
 package keycollector.main.levels
 
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.scenes.scene2d.ui.Label
 import keycollector.main.entities.Key
 
-final class Level1 extends Level {
+final class Level5 extends Level {
     @Override
     override def init(): Unit = {
-        stage.addActor(new Label("Use WASD to move around. Collect the keys (the yellow circles).", labelStyle))
+        for (i <- 1 to 35) keys.add(new Key(new Vector2(1280 - i.toFloat * 20, i.toFloat * 20)))
 
         keys.add(new Key(new Vector2(1000, 400)))
         keys.add(new Key(new Vector2(50, 50)))

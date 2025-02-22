@@ -74,10 +74,11 @@ abstract class Level extends Disposable {
                 iterator.remove()
             }
 
-        if(keys.isEmpty && getClass.getSimpleName != "TitleScreen" && getClass.getSimpleName != "Credits") {
-            if(getClass.getSimpleName.takeRight(1).toInt == StaticManager.main.getLevels.size - 1) StaticManager.main.setLevel(StaticManager.main.getLevels.get(StaticManager.main.getLevels.size - 1), StaticManager.main.getEngine)
-            else StaticManager.main.setLevel(StaticManager.main.getLevels.get(getClass.getSimpleName.takeRight(1).toInt + 1), StaticManager.main.getEngine)
-        }
+        if(keys.isEmpty && getClass.getSimpleName != "TitleScreen" && getClass.getSimpleName != "Credits" && getClass.getSimpleName != "Level10")
+            StaticManager.score = 0
+            StaticManager.main.setLevel(StaticManager.main.getLevels.get(getClass.getSimpleName.takeRight(1).toInt + 1), StaticManager.main.getEngine)
+
+        if(keys.isEmpty && getClass.getSimpleName == "Level10") StaticManager.main.setLevel(StaticManager.main.getLevels.get(StaticManager.main.getLevels.size - 1), StaticManager.main.getEngine)
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && getClass.getSimpleName != "TitleScreen" && getClass.getSimpleName != "Credits") paused.set(!paused.get)
     }
